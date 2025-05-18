@@ -5,7 +5,7 @@ import os
 import io
 import xlsxwriter
 
-UPLOAD_FOLDER = 'temp'
+UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = {'html'}
 
 app = Flask(__name__, 
