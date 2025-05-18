@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Instagram Analytics</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --text-light: #ecf0f1;
+            --text-dark: #2c3e50;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 40px 0;
+            margin-bottom: 40px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(44, 62, 80, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .header .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            color: white;
+            background: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-width: 250px;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .number {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 20px 0;
+        }
+
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .result-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .result-list {
+            list-style: none;
+            padding: 0;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .result-list li {
+            padding: 6px 10px;
+            margin: 4px 0;
+            background: var(--light-bg);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-list li:hover {
+            background: #e9ecef;
+            transform: translateX(10px);
+        }
+
+        .result-list li i {
+            color: var(--accent-color);
+        }
+
+        .footer {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Custom Scrollbar */
+        .result-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .result-list::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 4px;
+        }
+
+        .result-list::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        .result-list::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                flex-direction: column;
+            }
+            
+            .stat-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header animate__animated animate__fadeIn">
+            <h1 class="animate__animated animate__fadeInDown">Analysis Results</h1>
+            <button id="darkModeToggle" class="btn btn-sm btn-outline-light position-absolute top-0 end-0 m-3" style="z-index:10;">🌙 Dark Mode</button>
+            <p class="animate__animated animate__fadeInUp">Here's what we found in your Instagram relationships</p>
+        </header>
+
+        <a href="{{ url_for('index') }}" class="back-btn animate__animated animate__fadeIn">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+
+        <div class="stats">
+            <div class="stat-card animate__animated animate__fadeInLeft">
+                <i class="fas fa-heart fa-2x" style="color: var(--accent-color);"></i>
+                <h3>Your Fans</h3>
+                <div class="number">{{ fans|length }}</div>
+                <p class="text-muted">People who follow you but you don't follow back</p>
+            </div>
+            <div class="stat-card animate__animated animate__fadeInRight">
+                <i class="fas fa-user-friends fa-2x" style="color: var(--accent-color);"></i>
+                <h3>Snakes</h3>
+                <div class="number">{{ snakes|length }}</div>
+                <p class="text-muted">People you follow but don't follow you back</p>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <div class="result-card animate__animated animate__fadeInLeft">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0"><i class="fas fa-heart"></i> Your Fans</h2>
+                    <div>
+                        <select class="form-select form-select-sm d-inline-block w-auto me-2" onchange="sortList('fans', this.value)">
+                            <option value="name_asc">Sort by Name (A-Z)</option>
+                            <option value="name_desc">Sort by Name (Z-A)</option>
+                            <option value="date_asc">Sort by Date (Oldest)</option>
+                            <option value="date_desc">Sort by Date (Newest)</option>
+                        </select>
+                        <button class="btn btn-sm btn-outline-primary" onclick="downloadCSV('fans')"><i class="fas fa-download"></i> Download CSV</button>
+                    </div>
+                </div>
+                <input type="text" class="form-control mb-3" placeholder="Search fans..." onkeyup="filterList('fans')" id="fansSearch">
+                <ul class="result-list" id="fansList">
+                    {% for fan in fans %}
+                    <li data-username="{{ fan.username|lower }}" data-date="{{ fan.date }}">
+                        <span class="badge bg-primary me-2">{{ loop.index }}</span>
+                        <img src="https://ui-avatars.com/api/?name={{ fan.username }}&background=3498db&color=fff&rounded=true&size=32" alt="avatar" class="rounded-circle me-2" width="32" height="32">
+                        <div class="d-flex flex-column">
+                            <a href="https://instagram.com/{{ fan.username }}" class="btn btn-link p-0 d-flex align-items-center" target="_blank" rel="noopener noreferrer" title="Open Instagram profile">
+                                <i class="fab fa-instagram"></i>
+                                <span class="ms-2">{{ fan.username }}</span>
+                            </a>
+                            <small class="text-muted">Followed: {{ fan.date }}</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary ms-2 copy-btn" title="Copy username" onclick="copyToClipboard('{{ fan.username }}', this)"><i class="fas fa-copy"></i></button>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="result-card animate__animated animate__fadeInRight">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0"><i class="fas fa-user-friends"></i> Snakes</h2>
+                    <div>
+                        <select class="form-select form-select-sm d-inline-block w-auto me-2" onchange="sortList('snakes', this.value)">
+                            <option value="name_asc">Sort by Name (A-Z)</option>
+                            <option value="name_desc">Sort by Name (Z-A)</option>
+                            <option value="date_asc">Sort by Date (Oldest)</option>
+                            <option value="date_desc">Sort by Date (Newest)</option>
+                        </select>
+                        <button class="btn btn-sm btn-outline-primary" onclick="downloadCSV('snakes')"><i class="fas fa-download"></i> Download CSV</button>
+                    </div>
+                </div>
+                <input type="text" class="form-control mb-3" placeholder="Search snakes..." onkeyup="filterList('snakes')" id="snakesSearch">
+                <ul class="result-list" id="snakesList">
+                    {% for snake in snakes %}
+                    <li data-username="{{ snake.username|lower }}" data-date="{{ snake.date }}">
+                        <span class="badge bg-danger me-2">{{ loop.index }}</span>
+                        <img src="https://ui-avatars.com/api/?name={{ snake.username }}&background=e74c3c&color=fff&rounded=true&size=32" alt="avatar" class="rounded-circle me-2" width="32" height="32">
+                        <div class="d-flex flex-column">
+                            <a href="https://instagram.com/{{ snake.username }}" class="btn btn-link p-0 d-flex align-items-center" target="_blank" rel="noopener noreferrer" title="Open Instagram profile">
+                                <i class="fab fa-instagram"></i>
+                                <span class="ms-2">{{ snake.username }}</span>
+                            </a>
+                            <small class="text-muted">Followed: {{ snake.date }}</small>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary ms-2 copy-btn" title="Copy username" onclick="copyToClipboard('{{ snake.username }}', this)"><i class="fas fa-copy"></i></button>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">Made with <i class="fas fa-heart text-danger"></i> by Coder</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="me-3">Privacy Policy</a>
+                    <a href="#" class="me-3">Terms of Service</a>
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function copyToClipboard(text, btn) {
+        navigator.clipboard.writeText(text).then(function() {
+            btn.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(function() {
+                btn.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 1200);
+        });
+    }
+
+    function filterList(type) {
+        const searchInput = document.getElementById(type + 'Search');
+        const list = document.getElementById(type + 'List');
+        const filter = searchInput.value.toLowerCase();
+        const items = list.getElementsByTagName('li');
+
+        for (let item of items) {
+            const username = item.getAttribute('data-username');
+            if (username.includes(filter)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        }
+    }
+
+    function sortList(type, sortBy) {
+        const list = document.getElementById(type + 'List');
+        const items = Array.from(list.getElementsByTagName('li'));
+
+        items.sort((a, b) => {
+            const usernameA = a.getAttribute('data-username');
+            const usernameB = b.getAttribute('data-username');
+            const dateA = a.getAttribute('data-date');
+            const dateB = b.getAttribute('data-date');
+
+            if (sortBy === 'name_asc') {
+                return usernameA.localeCompare(usernameB);
+            } else if (sortBy === 'name_desc') {
+                return usernameB.localeCompare(usernameA);
+            } else if (sortBy === 'date_asc') {
+                return dateA.localeCompare(dateB);
+            } else if (sortBy === 'date_desc') {
+                return dateB.localeCompare(dateA);
+            }
+        });
+
+        // Clear the list
+        while (list.firstChild) {
+            list.removeChild(list.firstChild);
+        }
+
+        // Add sorted items back
+        items.forEach(item => {
+            list.appendChild(item);
+        });
+    }
+
+    function downloadCSV(type) {
+        const list = document.getElementById(type + 'List');
+        const items = list.getElementsByTagName('li');
+        let csv = 'Username,Follow Date\n';
+
+        for (let item of items) {
+            const username = item.getAttribute('data-username');
+            const date = item.getAttribute('data-date');
+            csv += `${username},${date}\n`;
+        }
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', `${type}_list.csv`);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    // Dark mode toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    darkModeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        if(document.body.classList.contains('dark-mode')) {
+            document.documentElement.style.setProperty('--light-bg', '#23272b');
+            document.documentElement.style.setProperty('--text-dark', '#f8f9fa');
+            document.documentElement.style.setProperty('--primary-color', '#111');
+        } else {
+            document.documentElement.style.setProperty('--light-bg', '#f8f9fa');
+            document.documentElement.style.setProperty('--text-dark', '#2c3e50');
+            document.documentElement.style.setProperty('--primary-color', '#2c3e50');
+        }
+    });
+    </script>
+</body>
+</html>
