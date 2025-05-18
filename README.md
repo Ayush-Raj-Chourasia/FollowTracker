@@ -1,6 +1,10 @@
 # FollowTracker
 A modern Python application built with Flask to analyze your Instagram social connections. Compare followers and following data to discover who unfollowed you, who's your true fan, and your mutual connections.
 
+
+![Instagram Analytics Tool Screenshot](image.png)
+
+
 ## Features
 - 🔍 Compare followers and following data
 - 📊 Identify fans, snakes, and mutual connections
@@ -74,6 +78,8 @@ This application is deployed on Vercel/Netlify for optimal performance and relia
 MIT License - Feel free to use and modify this project for your needs.
 
 ---
+
+
 
 
 
