@@ -2,7 +2,7 @@
 A modern Python application built with Flask to analyze your Instagram social connections. Compare followers and following data to discover who unfollowed you, who's your true fan, and your mutual connections.
 
 
-![Instagram Analytics Tool Screenshot](image.png)
+![Instagram Analytics Tool Screenshot](/temp/image.png)
 
 
 ## Features
